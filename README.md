@@ -4,6 +4,8 @@
 
 # My American Friends make me crazy
 
+![alt text](images/screenshot_calculator.jpeg)
+
 A small converter for the units that cause the most confusion in everyday conversations with American contacts. All conversions happen live while typing, no button or form submit required.
 
 ## Features
