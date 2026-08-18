@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+:root{
+  --teal: #00E0BA;
+  --purple: #91008D;
+
+  --dark-teal: hsl(170, 100%, 33%);
+  --body-bg: #00E0BA;
+  --panel: #E6FCF8;         /* light teal tint */
+  --panel-border: #B3F6EA;  /* medium teal tint */
+  --input-bg: #F2FDFC;      /* near-white teal tint */
+  --text: #570055;          /* dark purple shade */
+  --text-muted: #9A6699;    /* light purple tint */
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--body-bg);
+  font-family: 'Space Mono', monospace;
+  color: var(--text);
+}
+
+.card{
+  width: 520px;
+  max-width: 92vw;
+  background: var(--purple);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 20px 40px rgba(145,0,141,0.35);
+}
+
+.titlebar{
+  background: linear-gradient(90deg, var(--teal), var(--text));
+  color: #fff;
+  padding: 16px 20px;
+  border-radius: 8px 8px 0 0;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.panel{
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 0 0 8px 8px;
+  padding: 28px 24px 32px;
+}
+
+.row{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.row:last-child{
+  margin-bottom: 0;
+}
+
+.field{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.field label{
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.field input{
+  width: 100%;
+  font-family: 'Space Mono', monospace;
+  font-size: 1rem;
+  padding: 10px 12px;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  background: var(--input-bg);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field input:focus{
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(0,224,186,0.25);
+}
+
+.field input::placeholder{
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.field input.digits{
+  font-family: 'DSEG7 Classic', 'Space Mono', monospace;
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  background: #2C002A;
+  color: var(--teal);
+  border-color: var(--purple);
+  text-shadow: 0 0 6px rgba(0,224,186,0.55);
+}
+
+.field input.digits::placeholder{
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  letter-spacing: normal;
+  color: rgba(0,224,186,0.45);
+  text-shadow: none;
+}
+
+.field input.digits:focus{
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(0,224,186,0.3), 0 0 10px rgba(0,224,186,0.4);
+}
+
+.hint{
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.4;
+}
