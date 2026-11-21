@@ -9,58 +9,73 @@
 </head>
 <body>
 
-<div class="card">
-  <div class="titlebar">My American Friends make me crazy</div>
+<main class="card">
+  <h1 class="titlebar">My American Friends make me crazy</h1>
   <div class="panel">
 
-    <div class="row">
-      <div class="field">
-        <label for="fahrenheit">Fahrenheit</label>
-        <input type="text" id="fahrenheit" class="digits" placeholder="Fahrenheit" inputmode="decimal">
+    <section class="group" aria-labelledby="h-temp">
+      <h2 id="h-temp">Temperatur</h2>
+      <div class="row">
+        <div class="field">
+          <label for="fahrenheit">Fahrenheit (°F)</label>
+          <input type="text" id="fahrenheit" class="digits" placeholder="Fahrenheit" inputmode="decimal">
+        </div>
+        <span class="arrow" aria-hidden="true">⇄</span>
+        <div class="field">
+          <label for="celsius">Celsius (°C)</label>
+          <input type="text" id="celsius" class="digits" placeholder="Celsius" inputmode="decimal">
+        </div>
       </div>
-      <div class="field">
-        <label for="celsius">Celsius</label>
-        <input type="text" id="celsius" class="digits" placeholder="Celsius" inputmode="decimal">
-      </div>
-    </div>
+    </section>
 
-    <div class="row">
-      <div class="field">
-        <label for="feetInches">Feet / Inches</label>
-        <input type="text" id="feetInches" class="digits" placeholder="z. B. 5'9&quot;">
-        <div class="hint">Formate: 5'9", 5' 9, 5 9, 5,9</div>
+    <section class="group" aria-labelledby="h-height">
+      <h2 id="h-height">Körpergröße</h2>
+      <div class="row">
+        <div class="field">
+          <label for="feetInches">Feet / Inches</label>
+          <input type="text" id="feetInches" class="digits" placeholder="z. B. 5'9&quot;" aria-describedby="hint-fi">
+        </div>
+        <span class="arrow" aria-hidden="true">⇄</span>
+        <div class="field">
+          <label for="cm">cm oder m/cm</label>
+          <input type="text" id="cm" class="digits" placeholder="cm oder m/cm" inputmode="decimal" aria-describedby="hint-fi">
+        </div>
       </div>
-      <div class="field">
-        <label for="cm">cm oder m/cm</label>
-        <input type="text" id="cm" class="digits" placeholder="cm oder m/cm" inputmode="decimal">
-        <div class="hint">z. B. 175 oder 1,75</div>
-      </div>
-    </div>
+      <p class="hint" id="hint-fi">Formate: 5'9", 5' 9, 5 9, 5,9 · oder 175 / 1,75</p>
+    </section>
 
-    <div class="row">
-      <div class="field">
-        <label for="miles">Miles</label>
-        <input type="text" id="miles" class="digits" placeholder="Meilen" inputmode="decimal">
+    <section class="group" aria-labelledby="h-dist">
+      <h2 id="h-dist">Entfernung</h2>
+      <div class="row">
+        <div class="field">
+          <label for="miles">Miles</label>
+          <input type="text" id="miles" class="digits" placeholder="Meilen" inputmode="decimal">
+        </div>
+        <span class="arrow" aria-hidden="true">⇄</span>
+        <div class="field">
+          <label for="km">Kilometer (km)</label>
+          <input type="text" id="km" class="digits" placeholder="km" inputmode="decimal">
+        </div>
       </div>
-      <div class="field">
-        <label for="km">km</label>
-        <input type="text" id="km" class="digits" placeholder="km" inputmode="decimal">
-      </div>
-    </div>
+    </section>
 
-    <div class="row">
-      <div class="field">
-        <label for="lbs">lbs</label>
-        <input type="text" id="lbs" class="digits" placeholder="lbs" inputmode="decimal">
+    <section class="group" aria-labelledby="h-weight">
+      <h2 id="h-weight">Gewicht</h2>
+      <div class="row">
+        <div class="field">
+          <label for="lbs">Pounds (lbs)</label>
+          <input type="text" id="lbs" class="digits" placeholder="lbs" inputmode="decimal">
+        </div>
+        <span class="arrow" aria-hidden="true">⇄</span>
+        <div class="field">
+          <label for="kg">Kilogramm (kg)</label>
+          <input type="text" id="kg" class="digits" placeholder="kg" inputmode="decimal">
+        </div>
       </div>
-      <div class="field">
-        <label for="kg">kg</label>
-        <input type="text" id="kg" class="digits" placeholder="kg" inputmode="decimal">
-      </div>
-    </div>
+    </section>
 
   </div>
-</div>
+</main>
 
 <script src="script.js"></script>
 </body>
