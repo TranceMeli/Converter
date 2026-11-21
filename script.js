@@ -1,56 +1,47 @@
-const fahrenheitEl = document.getElementById('fahrenheit');
-const celsiusEl = document.getElementById('celsius');
-const feetInchesEl = document.getElementById('feetInches');
-const cmEl = document.getElementById('cm');
+// ---------- Parsing & formatting (pure functions) ----------
 
+// Returns a number, null for empty/incomplete input (e.g. "" or "-"), NaN for invalid input.
 function parseNumber(str){
   if(str === undefined || str === null) return null;
-  const cleaned = str.trim().replace(',', '.');
-  if(cleaned === '' || cleaned === '-' ) return null;
-  const num = parseFloat(cleaned);
-  return isNaN(num) ? null : num;
+  const s = str.trim();
+  if(s === '' || s === '-') return null;
+  if(!/^-?\d+(?:[.,]\d*)?$/.test(s) && !/^-?[.,]\d+$/.test(s)) return NaN;
+  return parseFloat(s.replace(',', '.'));
 }
 
-function formatNumber(num, decimals = 1){
+function formatNumber(num){
   if(!isFinite(num)) return '';
-  const rounded = Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
+  const abs = Math.abs(num);
+  const decimals = abs < 1 ? 3 : abs < 10 ? 2 : 1;
+  const factor = Math.pow(10, decimals);
+  const rounded = Math.round(num * factor) / factor;
   return rounded.toString().replace('.', ',');
 }
 
-fahrenheitEl.addEventListener('input', () => {
-  const f = parseNumber(fahrenheitEl.value);
-  if(f === null){ celsiusEl.value = ''; return; }
-  const c = (f - 32) * 5 / 9;
-  celsiusEl.value = formatNumber(c);
-});
-
-celsiusEl.addEventListener('input', () => {
-  const c = parseNumber(celsiusEl.value);
-  if(c === null){ fahrenheitEl.value = ''; return; }
-  const f = c * 9 / 5 + 32;
-  fahrenheitEl.value = formatNumber(f);
-});
-
+// Returns total inches, null for empty input, NaN for invalid input.
+// Formats: 5'9", 5' 9, 5'9, 5 9, 5,9 or a single number (feet).
 function parseFeetInches(str){
-  if(!str) return null;
-  const cleaned = str.trim().toLowerCase();
-  if(cleaned === '') return null;
+  if(str === undefined || str === null) return null;
+  const s = str.trim().toLowerCase();
+  if(s === '') return null;
 
-  // Formate: 5'9", 5' 9, 5'9, 5 9, 5,9
-  let match = cleaned.match(/^(\d+)\s*['′]\s*(\d+(?:[.,]\d+)?)\s*["″]?\s*$/);
+  let match = s.match(/^(\d+)\s*['′]\s*(\d+(?:[.,]\d+)?)\s*["″]?$/);
   if(match){
     return parseFloat(match[1]) * 12 + parseFloat(match[2].replace(',', '.'));
   }
 
-  match = cleaned.match(/^(\d+)[\s,]+(\d+(?:[.,]\d+)?)$/);
+  match = s.match(/^(\d+)[\s,]+(\d+(?:[.,]\d+)?)$/);
   if(match){
     return parseFloat(match[1]) * 12 + parseFloat(match[2].replace(',', '.'));
   }
 
-  const single = parseNumber(cleaned);
-  if(single !== null) return single * 12;
+  // Feet only, e.g. "5" or "5'" (while typing)
+  match = s.match(/^(\d+(?:[.,]\d+)?)\s*['′]?$/);
+  if(match){
+    return parseFloat(match[1].replace(',', '.')) * 12;
+  }
 
-  return null;
+  return NaN;
 }
 
 function cmToFeetInches(cm){
@@ -62,46 +53,86 @@ function cmToFeetInches(cm){
   return feet + "'" + inchesStr + '"';
 }
 
-feetInchesEl.addEventListener('input', () => {
-  const totalInches = parseFeetInches(feetInchesEl.value);
-  if(totalInches === null){ cmEl.value = ''; return; }
-  const cm = totalInches * 2.54;
-  cmEl.value = formatNumber(cm);
-});
+// Values below 10 in the cm field are read as meters (1,75 = 175 cm).
+function toCentimeters(val){
+  return val < 10 ? val * 100 : val;
+}
 
-cmEl.addEventListener('input', () => {
-  let val = parseNumber(cmEl.value);
-  if(val === null){ feetInchesEl.value = ''; return; }
-  const cm = val < 10 ? val * 100 : val;
-  feetInchesEl.value = cmToFeetInches(cm);
-});
+if(typeof module !== 'undefined'){
+  module.exports = { parseNumber, formatNumber, parseFeetInches, cmToFeetInches, toCentimeters };
+}
 
-const milesEl = document.getElementById('miles');
-const kmEl = document.getElementById('km');
+// ---------- DOM wiring ----------
 
-milesEl.addEventListener('input', () => {
-  const miles = parseNumber(milesEl.value);
-  if(miles === null){ kmEl.value = ''; return; }
-  kmEl.value = formatNumber(miles * 1.60934);
-});
+if(typeof document !== 'undefined'){
+  const MSG_NUMBER = 'Gib eine Zahl ein, z. B. 98,6.';
+  const MSG_FEET = "Format nicht erkannt. Versuche z. B. 5'9\" oder 5 9.";
 
-kmEl.addEventListener('input', () => {
-  const km = parseNumber(kmEl.value);
-  if(km === null){ milesEl.value = ''; return; }
-  milesEl.value = formatNumber(km / 1.60934);
-});
+  function setError(errEl, inputEl, message){
+    errEl.textContent = message ? '⚠ ' + message : '';
+    if(message){
+      inputEl.setAttribute('aria-invalid', 'true');
+    } else {
+      inputEl.removeAttribute('aria-invalid');
+    }
+  }
 
-const lbsEl = document.getElementById('lbs');
-const kgEl = document.getElementById('kg');
+  // Links two fields: typing in one updates the other.
+  function link({ a, b, errId, parseA, parseB, aToB, bToA, msgA, msgB }){
+    const aEl = document.getElementById(a);
+    const bEl = document.getElementById(b);
+    const errEl = document.getElementById(errId);
 
-lbsEl.addEventListener('input', () => {
-  const lbs = parseNumber(lbsEl.value);
-  if(lbs === null){ kgEl.value = ''; return; }
-  kgEl.value = formatNumber(lbs * 0.45359237);
-});
+    function handle(src, dst, parse, convert, msg){
+      src.addEventListener('input', () => {
+        const val = parse(src.value);
+        dst.value = '';
+        dst.removeAttribute('aria-invalid');
+        if(val === null){ setError(errEl, src, ''); return; }
+        if(Number.isNaN(val)){ setError(errEl, src, msg); return; }
+        setError(errEl, src, '');
+        dst.value = convert(val);
+      });
+    }
 
-kgEl.addEventListener('input', () => {
-  const kg = parseNumber(kgEl.value);
-  if(kg === null){ lbsEl.value = ''; return; }
-  lbsEl.value = formatNumber(kg / 0.45359237);
-});
+    handle(aEl, bEl, parseA, aToB, msgA);
+    handle(bEl, aEl, parseB, bToA, msgB);
+  }
+
+  link({
+    a: 'fahrenheit', b: 'celsius', errId: 'err-temp',
+    parseA: parseNumber, parseB: parseNumber,
+    aToB: f => formatNumber((f - 32) * 5 / 9),
+    bToA: c => formatNumber(c * 9 / 5 + 32),
+    msgA: MSG_NUMBER, msgB: MSG_NUMBER
+  });
+
+  link({
+    a: 'feetInches', b: 'cm', errId: 'err-height',
+    parseA: parseFeetInches, parseB: parseNumber,
+    aToB: totalInches => formatNumber(totalInches * 2.54),
+    bToA: val => cmToFeetInches(toCentimeters(val)),
+    msgA: MSG_FEET, msgB: MSG_NUMBER
+  });
+
+  link({
+    a: 'miles', b: 'km', errId: 'err-dist',
+    parseA: parseNumber, parseB: parseNumber,
+    aToB: mi => formatNumber(mi * 1.60934),
+    bToA: km => formatNumber(km / 1.60934),
+    msgA: MSG_NUMBER, msgB: MSG_NUMBER
+  });
+
+  link({
+    a: 'lbs', b: 'kg', errId: 'err-weight',
+    parseA: parseNumber, parseB: parseNumber,
+    aToB: lbs => formatNumber(lbs * 0.45359237),
+    bToA: kg => formatNumber(kg / 0.45359237),
+    msgA: MSG_NUMBER, msgB: MSG_NUMBER
+  });
+
+  // Select the whole value on focus so it can be overwritten right away.
+  document.querySelectorAll('input.digits').forEach(el => {
+    el.addEventListener('focus', () => setTimeout(() => el.select(), 0));
+  });
+}

@@ -16,14 +16,15 @@ A small browser-based converter for the units that cause the most confusion in c
 - Miles ⇄ kilometers
 - Pounds (lbs) ⇄ kilograms
 - Works in both directions: type into either field and the other one updates
-- Results are rounded to one decimal place and use a decimal comma
+- Results use a decimal comma and are rounded sensibly (3 decimals below 1, 2 below 10, otherwise 1)
+- Strict input check: invalid input such as `12abc` shows a hint under the fields instead of silently converting
 - Accessible: labelled fields, visible keyboard focus, AA-level text contrast, responsive layout, respects `prefers-reduced-motion`
 - No build step, no dependencies, no framework
 
 ## Prerequisites
 
 - A modern web browser
-- An internet connection on first load (the number fields use the DSEG7 Classic font from a CDN, and the page falls back to a monospace font without it)
+- Nothing else: fonts (Space Mono, DSEG7 Classic) are bundled in `fonts/`, so the page works offline and makes no third-party requests
 
 ## Quick start
 
@@ -54,6 +55,7 @@ A value below 10 in the cm field is read as meters, so `1,75` and `175` mean the
 index.html   Markup
 style.css    Styling (colors, typography, responsive layout)
 script.js    Conversion logic
+fonts/       Self-hosted fonts (SIL Open Font License)
 images/      Screenshot used in this README
 ```
 

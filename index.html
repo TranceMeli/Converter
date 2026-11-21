@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My American Friends make me crazy</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/dseg7-classic/index.css">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,6 +25,7 @@
           <input type="text" id="celsius" class="digits" placeholder="Celsius" inputmode="decimal">
         </div>
       </div>
+      <p class="error" id="err-temp" aria-live="polite"></p>
     </section>
 
     <section class="group" aria-labelledby="h-height">
@@ -41,7 +41,8 @@
           <input type="text" id="cm" class="digits" placeholder="cm oder m/cm" inputmode="decimal" aria-describedby="hint-fi">
         </div>
       </div>
-      <p class="hint" id="hint-fi">Formate: 5'9", 5' 9, 5 9, 5,9 · oder 175 / 1,75</p>
+      <p class="hint" id="hint-fi">Formate: 5'9", 5' 9, 5 9, 5,9 · cm: 175 oder in Metern 1,75 (Werte unter 10 gelten als Meter)</p>
+      <p class="error" id="err-height" aria-live="polite"></p>
     </section>
 
     <section class="group" aria-labelledby="h-dist">
@@ -57,6 +58,7 @@
           <input type="text" id="km" class="digits" placeholder="km" inputmode="decimal">
         </div>
       </div>
+      <p class="error" id="err-dist" aria-live="polite"></p>
     </section>
 
     <section class="group" aria-labelledby="h-weight">
@@ -72,6 +74,7 @@
           <input type="text" id="kg" class="digits" placeholder="kg" inputmode="decimal">
         </div>
       </div>
+      <p class="error" id="err-weight" aria-live="polite"></p>
     </section>
 
   </div>

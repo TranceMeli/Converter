@@ -1,4 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+/* Self-hosted fonts (SIL Open Font License): no third-party requests */
+@font-face{
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/space-mono-latin-400-normal.woff2') format('woff2');
+}
+@font-face{
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/space-mono-latin-700-normal.woff2') format('woff2');
+}
+@font-face{
+  font-family: 'DSEG7 Classic';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/dseg7-classic-latin-400-normal.woff2') format('woff2');
+}
 
 :root{
   --teal: #00E0BA;
@@ -157,6 +178,26 @@ body{
   color: var(--text-muted);
   margin: 8px 0 0;
   line-height: 1.5;
+}
+
+.error{
+  margin: 8px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #9B1C1C;           /* ~7:1 on panel */
+}
+
+.error:empty{
+  display: none;
+}
+
+.field input[aria-invalid="true"]{
+  border-color: #9B1C1C;
+}
+
+.field input.digits[aria-invalid="true"]{
+  border-color: #FF8A8A;
+  box-shadow: 0 0 0 2px rgba(255,138,138,0.35);
 }
 
 @media (max-width: 480px){
